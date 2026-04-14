@@ -34,6 +34,7 @@ Menggunakan agentic AI yang bisa
 
 ## Struktur Project Ini
 
+```
 health-journal-summarizer/
 ├── README.md
 ├── LICENSE
@@ -81,3 +82,5 @@ health-journal-summarizer/
 └── config/
     ├── settings.example.yaml
     └── prompts.yaml
+
+```
