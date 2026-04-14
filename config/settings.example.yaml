@@ -1,0 +1,106 @@
+project:
+  name: Health-Journal-Summarizer
+  version: 0.1.0
+  environment: development
+  description: >-
+    A beginner-friendly agentic workflow for turning health topics into journal-based
+    summaries and Medium-style article drafts.
+
+workflow:
+  default_topic_source: data/topics/science-topics.json
+  max_steps: 6
+  min_sources: 5
+  max_sources: 8
+  require_human_review: true
+  save_research_notes: true
+  save_evidence_summary: true
+  save_article_draft: true
+
+research:
+  allowed_source_types:
+    - systematic_review
+    - meta_analysis
+    - randomized_controlled_trial
+    - cohort_study
+    - case_control_study
+    - cross_sectional_study
+  preferred_source_types:
+    - systematic_review
+    - meta_analysis
+    - randomized_controlled_trial
+    - cohort_study
+  allow_supporting_organizations:
+    - WHO
+    - CDC
+    - NIH
+    - NHS
+  exclude_source_types:
+    - blog
+    - testimonial
+    - social_media_post
+    - marketing_page
+  publication_year:
+    min: 2015
+    max: null
+  require_peer_review: true
+  include_study_type_in_output: true
+  include_limitations_in_output: true
+
+summarization:
+  include_evidence_strength: true
+  include_uncertainty: true
+  include_conflicting_findings: true
+  include_human_vs_animal_distinction: true
+  max_key_findings: 5
+  max_summary_paragraphs: 4
+
+writing:
+  target_audience: general_readers
+  tone: clear_calm_responsible
+  style: medium_like
+  use_clickbait: false
+  include_disclaimer: true
+  include_references: true
+  max_article_sections: 5
+  opening_style: explanatory
+
+safety:
+  allow_medical_advice: false
+  allow_diagnosis: false
+  allow_personalized_recommendations: false
+  overclaim_protection: true
+  require_limitations_statement: true
+  require_uncertainty_statement: true
+  require_manual_review_before_publish: true
+  default_disclaimer: >-
+    This content is for educational and literature summarization purposes only. It is
+    not medical advice, diagnosis, or a substitute for consultation with a qualified
+    health professional.
+
+outputs:
+  base_dir: outputs
+  summaries_dir: outputs/summaries
+  drafts_dir: outputs/drafts
+  research_notes_dir: outputs/research-notes
+  overwrite_existing: false
+  file_naming: slugified-topic
+
+logging:
+  level: INFO
+  save_run_logs: true
+  logs_dir: outputs/logs
+  print_to_console: true
+
+prompts:
+  config_path: config/prompts.yaml
+  planner_key: planner
+  researcher_key: researcher
+  summarizer_key: summarizer
+  writer_key: writer
+
+future:
+  enable_topic_ranking: false
+  enable_reference_formatting: false
+  enable_quality_scoring: false
+  enable_multi_agent_mode: false
+  enable_auto_publish: false
