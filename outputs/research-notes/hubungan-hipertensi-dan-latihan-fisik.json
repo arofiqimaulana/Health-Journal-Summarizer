@@ -1,0 +1,49 @@
+{
+  "topic": "Hubungan hipertensi dan latihan fisik",
+  "status": "starter_research_notes",
+  "recommended_study_types": [
+    "systematic_review",
+    "meta_analysis",
+    "randomized_controlled_trial",
+    "cohort_study"
+  ],
+  "search_queries": [
+    "Hubungan hipertensi dan latihan fisik systematic review",
+    "Hubungan hipertensi dan latihan fisik meta analysis",
+    "Hubungan hipertensi dan latihan fisik randomized controlled trial",
+    "Hubungan hipertensi dan latihan fisik cohort study"
+  ],
+  "selected_sources": [
+    {
+      "title": "Sample systematic review on physical activity and cardiometabolic health",
+      "study_type": "systematic_review",
+      "year": 2023,
+      "main_finding": "Regular physical activity is associated with improved cardiometabolic markers in adults.",
+      "important_limitation": "This is a placeholder source and should be replaced with a real journal article.",
+      "source_link": "https://example.org/systematic-review-physical-activity"
+    },
+    {
+      "title": "Sample randomized trial on walking after meals",
+      "study_type": "randomized_controlled_trial",
+      "year": 2022,
+      "main_finding": "Short walks after meals may help improve short-term glucose control in some populations.",
+      "important_limitation": "This is a placeholder trial and does not represent a verified source.",
+      "source_link": "https://example.org/rct-walking-after-meals"
+    },
+    {
+      "title": "Sample cohort study on sleep and appetite regulation",
+      "study_type": "cohort_study",
+      "year": 2021,
+      "main_finding": "Poor sleep duration may be associated with changes in appetite regulation and eating patterns.",
+      "important_limitation": "This is a placeholder cohort study for workflow development only.",
+      "source_link": "https://example.org/cohort-sleep-appetite"
+    }
+  ],
+  "research_notes": [
+    "Replace all sample sources with real peer-reviewed journal articles before publishing.",
+    "Prefer systematic reviews and meta-analyses when available.",
+    "Record study design, population, main findings, and limitations for each source.",
+    "Do not treat placeholder links as valid scientific references."
+  ],
+  "next_action": "Validate and replace sample journal sources with real literature search results."
+}
