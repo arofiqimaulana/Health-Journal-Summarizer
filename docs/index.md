@@ -1,30 +1,93 @@
-# Health Journal Summarizer - Dokumentasi
+# Documentation Index
 
-## Tujuan Dokumentasi
-Dokumentasi ini dibuat dengan tujuan untuk memberikan panduan menyeluruh mengenai arsitektur, cara kerja, konfigurasi, dan panduan operasional dari sistem **Health Journal Summarizer**. Dokumentasi ini akan membantu pengembang maupun pengguna untuk memahami bagaimana *AI Agent* bekerja di balik layar dalam memproses dan menghasilkan ringkasan jurnal kesehatan secara terstruktur.
+Welcome to the documentation for **Health-Journal-Summarizer**.
 
-## Gambaran Sistem
-**Health SafeArea Journal Summarizer** adalah sebuah sistem pintar berbasis Multi-Agent System yang dirancang untuk melakukan penelusuran, ekstraksi, analisis, dan penyusunan ringkasan atas jurnal-jurnal ilmu kesehatan atau medis yang kompleks. Sistem ini memanfaatkan agen-agen spesifik seperti *Planner*, *Researcher*, *Summarizer*, dan *Writer* yang saling berkolaborasi agar jurnal-jurnal penelitian mentah bisa diubah menjadi artikel paparan atau draf yang lebih mudah dicerna, seperti ringkasan untuk artikel blog atau Medium.
+This project is a beginner-friendly agentic AI workflow for turning health topics into journal-based summaries and Medium-style article drafts.
 
-## Daftar Halaman Docs
-Berikut adalah panduan lengkap dokumentasi yang dapat Anda eksplorasi:
-- [Getting Started](getting-started.md) — Panduan instalasi dan persiapan awal proyek lokal.
-- [Architecture](architecture.md) — Penjelasan mendalam mengenai arsitektur perangkat lunak dan interaksi antar agen.
-- [Workflow](workflow.md) — Alur kerja sistem mulai dari pra-pemrosesan pencarian jurnal hingga penulisan hasil akhir.
-- [Prompts](prompts.md) — Detail tentang set instruksi atau *prompts* utama untuk *LLM* pada masing-masing agen.
-- [Safety](safety.md) — Pedoman dan batasan keamanan (*guardrails*) untuk memastikan informasi kesehatan yang diringkas tidak menimbulkan salah tafsir maupun risiko berbahaya.
-- [Roadmap](roadmap.md) — Rencana fitur dan pengembangan platform ke depannya.
-- **Examples**:
-  - [Example Topic](examples/example-topic.md) — Contoh input topik bahasa JSON/Markdown.
-  - [Example Summary](examples/example-summary.md) — Contoh hasil ringkasan teknikal dari sistem.
-  - [Example Medium Draft](examples/example-medium-draft.md) — Contoh format siap pakai (*draft*) yang telah disusun *Writer*.
+The documentation in this folder is designed to help you understand the project from multiple angles: what it does, how it works, how it is structured, and what safety rules guide it.
 
-## Siapa Target Pengguna Project Ini
-Proyek ini dikembangkan terutama untuk berbagai kalangan yang berinteraksi dengan literatur kesehatan dan inovasi AI, seperti:
-- **Tenaga Medis & Peneliti**: Dokter atau saintis yang membutuhkan konklusi dan sintesis cepat dari berbagai bahan literatur utama.
-- **AI/Software Engineer**: Pengembang piranti lunak yang tertarik untuk mempelajari implementasi agen cerdas yang saling berkolaborasi (bermain peran).
-- **Penulis & Content Creator Medis**: Pemerhati kesehatan yang ingin secara otomatis membuat draf materi tertulis berdasarkan jurnal terpercaya.
-- **Mahasiswa Kesehatan**: Mahasiswa yang hendak mendapatkan gambaran ringkas referensi literatur dengan lebih mudah.
+## Documentation Overview
 
-## Status Pengembangan
-Proyek saat ini berada dalam status **Tahap Awal (*Early In-Development*)**. Fokus saat ini adalah memastikan kestabilan dan keakuratan tiap agen utama, membangun alur kerja solid, dan pengujian kualitas *prompt*. Karenanya, mungkin sering terjadi perubahan perombakan arsitektur dan penambahan fitur secara iteratif.
+Use the following documents as your main guide:
+
+- `getting-started.md`  
+  A practical introduction to running the project for the first time.
+
+- `workflow.md`  
+  Explains the end-to-end workflow, from topic selection to article draft generation.
+
+- `architecture.md`  
+  Describes the main components of the system, including planner, researcher, summarizer, and writer.
+
+- `prompts.md`  
+  Documents the prompt design used by the agent components.
+
+- `safety.md`  
+  Explains the safety boundaries and health-content precautions used in the project.
+
+- `roadmap.md`  
+  Describes the staged development direction of the project.
+
+## Suggested Reading Order
+
+If you are new to the project, this reading order is recommended:
+
+1. `../README.md`
+2. `getting-started.md`
+3. `workflow.md`
+4. `architecture.md`
+5. `safety.md`
+6. `prompts.md`
+7. `roadmap.md`
+
+## What This Project Tries to Do
+
+Health-Journal-Summarizer is designed to help with a structured workflow that:
+
+- starts from a health topic
+- organizes research notes
+- creates a cautious evidence summary
+- turns the result into a draft article for general readers
+
+The project is also meant as a learning tool for understanding agentic AI in a practical and manageable way.
+
+## What This Project Does Not Try to Do
+
+This project is not intended to:
+
+- diagnose health conditions
+- replace medical professionals
+- provide personalized treatment advice
+- publish medical claims without review
+
+Its role is educational and workflow-oriented, not clinical.
+
+## Current State
+
+At the current stage, the project already includes:
+
+- core documentation
+- a starter workflow in `src/main.py`
+- planner, researcher, summarizer, and writer modules
+- saved outputs for plans, research notes, summaries, and article drafts
+
+The project is still in an early development stage, so some parts remain intentionally simple and beginner-friendly.
+
+## Where to Start in the Code
+
+If you want to explore the code, start here:
+
+- `src/main.py`
+
+Then continue to:
+
+- `src/agent/planner.py`
+- `src/agent/researcher.py`
+- `src/agent/summarizer.py`
+- `src/agent/writer.py`
+
+## Final Note
+
+This documentation is meant to grow with the project.
+
+As the workflow becomes more capable, the docs should continue to reflect the real structure, real limitations, and real goals of the system.

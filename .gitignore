@@ -1,2 +1,3 @@
 .DS_Store
 src/agent/__pycache__/
+tests/__pycache__/
