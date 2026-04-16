@@ -64,7 +64,7 @@ def main() -> None:
         return
 
     plan = build_plan(topic)
-    research_notes = research_topic(topic)
+    research_notes = research_topic(plan)
     summary = summarize_evidence(research_notes)
     article = write_article(summary)
 

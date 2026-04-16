@@ -1,76 +1,57 @@
 from __future__ import annotations
-
+import os
+import json
 from typing import Any
+import google.generativeai as genai
 
-
-def format_bullets(items: list[str]) -> str:
-    if not items:
-        return "- No items available yet."
-    return "\n".join(f"- {item}" for item in items)
-
-
-def format_source_overview(source_overview: list[dict[str, Any]]) -> str:
-    if not source_overview:
-        return "- No source overview is available yet."
-
-    lines = []
-    for source in source_overview:
-        title = source.get("title", "Untitled source")
-        study_type = source.get("study_type", "unknown")
-        year = source.get("year", "unknown")
-        main_finding = source.get("main_finding", "No main finding recorded.")
-        lines.append(f"- {title} ({study_type}, {year}): {main_finding}")
-    return "\n".join(lines)
-
+api_key = os.environ.get("GEMINI_API_KEY")
 
 def write_article(summary: dict[str, Any]) -> dict[str, Any]:
-    """Convert an evidence summary into a more natural starter Medium-style article draft."""
+    """Convert an evidence summary into a natural Medium-style article draft using Gemini AI."""
     topic = summary.get("topic", "Untitled topic")
-    key_findings = summary.get("key_findings", [])
-    limitations = summary.get("limitations", [])
-    caution_notes = summary.get("caution_notes", [])
-    source_overview = summary.get("source_overview", [])
-    source_count = summary.get("source_count", 0)
-    evidence_strength = summary.get("evidence_strength", "not_assessed_yet")
+    
+    if not api_key:
+        print("WARNING: GEMINI_API_KEY not found. Using naive fallback writer.")
+        return {
+            "topic": topic,
+            "title": topic,
+            "draft": "# Fallback Draft\n\nPlease add a Gemini API Key to generate real articles.",
+            "status": "starter_article_draft",
+        }
 
-    findings_text = format_bullets(key_findings)
-    limitations_text = format_bullets(limitations)
-    caution_text = format_bullets(caution_notes)
-    sources_text = format_source_overview(source_overview)
-
-    article = f"""# {topic}
-
-## Introduction
-This draft explores the topic of **{topic}** using a starter evidence-summary workflow. At this stage, the article is based on {source_count} structured source entry or entries collected during the research step.
-
-## What the Current Sources Suggest
-Here are the main findings gathered so far:
-{findings_text}
-
-## Source Overview
-The current evidence base in this draft includes:
-{sources_text}
-
-## How Strong Is the Evidence?
-At the moment, the evidence strength is labeled as: **{evidence_strength}**.
-
-This label is still part of a development-stage workflow, so it should not be treated as a final scientific judgment. It is mainly here to help structure the writing and remind the reviewer to verify the real quality of the supporting studies.
-
-## Important Limitations
-A careful summary should always include its limitations:
-{limitations_text}
-
-## Caution Notes
-Before turning this into a publishable article, keep these notes in mind:
-{caution_text}
-
-## Closing Note
-This draft is meant for educational and workflow development purposes. It is not medical advice, diagnosis, or treatment guidance. Before publication, all placeholder evidence should be replaced with real peer-reviewed journal sources and reviewed manually.
-"""
+    model = genai.GenerativeModel("gemini-2.0-flash")
+    summary_text = json.dumps(summary, indent=2, ensure_ascii=False)
+    
+    prompt = f"""
+    You are an expert Health & Wellness writer writing for a platform like Medium.
+    You have been provided with an AI-generated evidence summary on the topic: "{topic}".
+    
+    Evidence Summary:
+    {summary_text}
+    
+    Task: Write an engaging, accessible, and cautious Medium-style article draft in Indonesian based ONLY on the evidence provided above.
+    
+    Requirements:
+    - Include a catchy title.
+    - Write an engaging introduction.
+    - Discuss what the current scientific literature suggests based on the key findings.
+    - Mention the evidence strength and the sources overview.
+    - Explicitly state the limitations and provide caution notes to the reader so they don't treat this as medical advice.
+    - Format the entire article in Markdown (`#`, `##`, `-`, `**`, etc.).
+    - Do not invent medical facts. If the evidence is weak, say it's weak.
+    """
+    
+    print("Calling Gemini for Writer...")
+    try:
+        response = model.generate_content(prompt)
+        article = response.text
+    except Exception as e:
+        print(f"Gemini API failed in writer: {e}")
+        article = f"# Error generating article for {topic}\n\n{e}"
 
     return {
         "topic": topic,
         "title": topic,
         "draft": article,
-        "status": "starter_article_draft",
+        "status": "ai_generated_article_draft",
     }

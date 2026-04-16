@@ -1,17 +1,24 @@
 from __future__ import annotations
-
+import os
+import json
 from typing import Any
+import google.generativeai as genai
+from pydantic import BaseModel
 
+api_key = os.environ.get("GEMINI_API_KEY")
+
+class SummaryOutput(BaseModel):
+    topic: str
+    summary: str
+    key_findings: list[str]
+    evidence_strength: str
+    limitations: list[str]
+    caution_notes: list[str]
 
 def summarize_evidence(research_notes: dict[str, Any]) -> dict[str, Any]:
-    """Turn research notes into a more realistic starter evidence summary.
-
-    This version reads selected_sources and turns them into structured findings,
-    limitations, and a cautious evidence overview.
-    """
+    """Turn research notes into an evidence summary using Gemini AI."""
     topic = research_notes.get("topic", "Untitled topic")
     selected_sources = research_notes.get("selected_sources", [])
-    recommended_study_types = research_notes.get("recommended_study_types", [])
     search_queries = research_notes.get("search_queries", [])
 
     if not selected_sources:
@@ -19,72 +26,72 @@ def summarize_evidence(research_notes: dict[str, Any]) -> dict[str, Any]:
             "topic": topic,
             "summary": f"No sources have been selected yet for the topic: {topic}.",
             "key_findings": [],
-            "evidence_strength": "not_assessed_yet",
+            "evidence_strength": "none",
             "source_count": 0,
             "source_overview": [],
-            "limitations": [
-                "No journal sources were available in research_notes.",
-                "Evidence summary cannot be generated without source material.",
-            ],
-            "caution_notes": [
-                "Do not publish content until real scientific sources are added.",
-            ],
+            "limitations": ["No journal sources available."],
+            "caution_notes": ["No evidence to summarize."],
             "open_questions": search_queries,
         }
 
     source_overview = []
-    key_findings = []
-    limitations = []
-
     for source in selected_sources:
-        source_title = source.get("title", "Untitled source")
-        study_type = source.get("study_type", "unknown")
-        year = source.get("year", "unknown")
-        main_finding = source.get("main_finding", "No main finding recorded.")
-        important_limitation = source.get("important_limitation", "No limitation recorded.")
+        source_overview.append({
+            "title": source.get("title"),
+            "study_type": source.get("study_type"),
+            "year": source.get("year")
+        })
 
-        source_overview.append(
-            {
-                "title": source_title,
-                "study_type": study_type,
-                "year": year,
-                "main_finding": main_finding,
-            }
-        )
-        key_findings.append(main_finding)
-        limitations.append(f"{source_title}: {important_limitation}")
+    if not api_key:
+        print("WARNING: GEMINI_API_KEY not found. Using naive fallback summary.")
+        return {
+            "topic": topic,
+            "summary": "Fallback summary due to missing API key.",
+            "key_findings": ["Needs AI for extraction."],
+            "evidence_strength": "unknown",
+            "source_count": len(selected_sources),
+            "source_overview": source_overview,
+            "limitations": ["API key missing."],
+            "caution_notes": ["Fallback data only."],
+            "open_questions": search_queries,
+        }
 
-    evidence_strength = "preliminary_placeholder"
-
-    if any(source.get("study_type") == "systematic_review" for source in selected_sources):
-        evidence_strength = "moderate_placeholder"
-
-    summary_text = (
-        f"This starter evidence summary for '{topic}' is based on {len(selected_sources)} "
-        f"sample source(s). The current output is useful for workflow development, but all "
-        f"sample sources must be replaced with real peer-reviewed literature before publication."
+    generation_config = genai.GenerationConfig(
+        response_mime_type="application/json",
+        response_schema=SummaryOutput
     )
-
-    caution_notes = [
-        "This summary currently uses sample journal-like sources for development purposes.",
-        "Do not interpret placeholder findings as verified scientific conclusions.",
-        "Replace all sample sources with real literature and review the evidence manually before publishing.",
-    ]
-
-    if "animal" in " ".join(key_findings).lower():
-        caution_notes.append(
-            "At least one finding may involve non-human evidence. Confirm study population before writing conclusions."
-        )
-
-    return {
-        "topic": topic,
-        "summary": summary_text,
-        "key_findings": key_findings,
-        "evidence_strength": evidence_strength,
-        "source_count": len(selected_sources),
-        "recommended_study_types": recommended_study_types,
-        "source_overview": source_overview,
-        "limitations": limitations,
-        "caution_notes": caution_notes,
-        "open_questions": search_queries,
-    }
+    model = genai.GenerativeModel("gemini-2.0-flash", generation_config=generation_config)
+    
+    sources_text = json.dumps(selected_sources, indent=2)
+    prompt = f"""
+    You are an AI Medical Summarizer. The topic is: "{topic}".
+    Here are the PubMed sources retrieved:
+    {sources_text}
+    
+    Please read the titles and study types to infer the overall evidence. Since we only have titles, do your best to summarize what the evidence likely points to, while remaining VERY CAUTIOUS.
+    Provide your answer strictly following the JSON schema.
+    Ensure that limitations and caution notes reflect the fact that we only read abstracts/titles.
+    Output language: Indonesian.
+    """
+    
+    print("Calling Gemini for Summarizer...")
+    try:
+        response = model.generate_content(prompt)
+        result = json.loads(response.text)
+        result["source_count"] = len(selected_sources)
+        result["source_overview"] = source_overview
+        result["open_questions"] = search_queries
+        return result
+    except Exception as e:
+        print(f"Gemini API failed in summarizer: {e}")
+        return {
+            "topic": topic,
+            "summary": "Failed to generate AI summary.",
+            "key_findings": [],
+            "evidence_strength": "unknown",
+            "source_count": len(selected_sources),
+            "source_overview": source_overview,
+            "limitations": ["API failure"],
+            "caution_notes": ["API failure"],
+            "open_questions": search_queries,
+        }

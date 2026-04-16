@@ -2,7 +2,10 @@
   "topic": "Hubungan hipertensi dan latihan fisik",
   "priority": "high",
   "status": "idea",
-  "goal": "Create a journal-based summary and Medium-style draft for: Hubungan hipertensi dan latihan fisik",
+  "goal": "Fallback plan due to API error",
+  "english_search_queries": [
+    "Hubungan hipertensi dan latihan fisik"
+  ],
   "steps": [
     {
       "step": "Select one health topic from the backlog",
@@ -23,18 +26,7 @@
       "step": "Write a Medium-style draft",
       "purpose": "Convert the summary into a readable public-facing article draft.",
       "expected_output": "Starter article draft"
-    },
-    {
-      "step": "Review outputs before publishing",
-      "purpose": "Ensure safety, clarity, and accuracy before use.",
-      "expected_output": "Human-reviewed final output"
     }
   ],
-  "success_criteria": [
-    "One topic is selected clearly.",
-    "Research notes are prepared.",
-    "Evidence summary mentions limitations.",
-    "Article draft is created.",
-    "Outputs are reviewed by a human before publishing."
-  ]
+  "success_criteria": []
 }

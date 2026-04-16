@@ -71,7 +71,44 @@ Important folders:
 
 ## Quick Start
 
-### 1. Prepare topics
+### 1. Clone and setup environment
+
+```bash
+git clone https://github.com/arofiqimaulana/Health-Journal-Summarizer.git
+cd health-journal-summarizer
+```
+
+Create and activate a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # Mac/Linux
+# .venv\Scripts\activate    # Windows
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Add your Gemini API Key
+
+Create a `.env` file in the root folder:
+
+```bash
+touch .env
+```
+
+Then open `.env` and add your Google AI Studio API Key:
+
+```env
+GEMINI_API_KEY="your-gemini-api-key-here"
+```
+
+> Get your free API Key at: https://aistudio.google.com/app/apikey
+
+### 3. Prepare topics
 
 Add health topics to:
 
@@ -89,20 +126,27 @@ Example:
 ]
 ```
 
-### 2. Run the workflow
+### 4. Run the workflow
 
 ```bash
-python src/main.py
+.venv/bin/python src/main.py
 ```
 
-### 3. Check outputs
+The system will automatically:
+- 🧠 **Plan**: Gemini AI creates English PubMed search queries from your Indonesian topic
+- 🔬 **Research**: Fetches real journal sources from PubMed (NCBI)
+- 📊 **Summarize**: Gemini AI summarizes the evidence with caution notes
+- ✍️ **Write**: Gemini AI writes a Medium-style article draft in Indonesian
+
+### 5. Check outputs
 
 Generated files are saved to:
 
-- `outputs/plans/`
-- `outputs/research-notes/`
-- `outputs/summaries/`
-- `outputs/drafts/`
+- `outputs/plans/` — workflow plan (JSON)
+- `outputs/research-notes/` — PubMed sources (JSON)
+- `outputs/summaries/` — evidence summary (JSON)
+- `outputs/drafts/` — final article draft (Markdown)
+
 
 ## Documentation
 
@@ -175,3 +219,4 @@ This project is not trying to be a fully autonomous medical system.
 Its goal is much more practical:
 
 build a small, understandable, and safety-aware workflow for turning health topics into better structured learning and writing outputs.
+

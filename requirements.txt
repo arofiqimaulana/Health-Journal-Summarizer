@@ -1,2 +1,6 @@
 pytest
 pyyaml
+requests
+google-generativeai
+pydantic
+python-dotenv
