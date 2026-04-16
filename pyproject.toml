@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "health-journal-summarizer"
+version = "0.1.0"
+description = "Beginner-friendly agentic AI workflow for turning health topics into journal-based summaries and Medium-style drafts."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
